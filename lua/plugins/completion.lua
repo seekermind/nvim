@@ -3,6 +3,31 @@ return {
 		"hrsh7th/cmp-nvim-lsp",
 	},
 	{
+		"MunifTanjim/eslint.nvim",
+		config = function()
+			local eslint = require("eslint")
+			eslint.setup({
+				bin = "eslint", -- or `eslint_d`
+				code_actions = {
+					enable = true,
+					apply_on_save = {
+						enable = true,
+						types = { "directive", "problem", "suggestion", "layout" },
+					},
+					disable_rule_comment = {
+						enable = true,
+						location = "separate_line", -- or `same_line`
+					},
+				},
+				diagnostics = {
+					enable = true,
+					report_unused_disable_directives = false,
+					run_on = "type", -- or `save`
+				},
+			})
+		end,
+	},
+	{
 		"micangl/cmp-vimtex",
 		config = function()
 			require("cmp_vimtex").setup({
@@ -23,7 +48,11 @@ return {
 		dependencies = { "saadparwaiz1/cmp_luasnip" },
 		config = function()
 			-- hot reload snippets
-			vim.keymap.set('n', '<Leader>L', '<Cmd>lua require("luasnip.loaders.from_lua").load({paths = "~/.config/nvim/luasnippets/"})<CR>')
+			vim.keymap.set(
+				"n",
+				"<Leader>L",
+				'<Cmd>lua require("luasnip.loaders.from_lua").load({paths = "~/.config/nvim/luasnippets/"})<CR>'
+			)
 			require("luasnip").setup({
 				update_events = "TextChanged,TextChangedI",
 				enable_autosnippets = true,
@@ -90,8 +119,7 @@ return {
 				formatting = {
 					format = function(entry, vim_item)
 						-- Kind icons
-						vim_item.kind = string.format("%s %s", kind_icons[vim_item.kind],
-							vim_item.kind)                 -- This concatenates the icons with the name of the item kind
+						vim_item.kind = string.format("%s %s", kind_icons[vim_item.kind], vim_item.kind) -- This concatenates the icons with the name of the item kind
 						-- Source
 						vim_item.menu = ({
 							vimtex = vim_item.menu,
